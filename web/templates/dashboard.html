@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — HeartScreen{% endblock %}
+
+{% block content %}
+<section class="section--tight" style="padding-top:56px">
+  <div class="container">
+    <span class="eyebrow reveal">Model comparison</span>
+    <h1 class="reveal" data-delay="1" style="margin:14px 0 10px;font-size:clamp(2rem,4vw,2.8rem)">Performance dashboard</h1>
+    <p class="lead reveal" data-delay="2">
+      Every model is trained on the same 80/20 split and judged on the metrics that matter for
+      medical screening — with recall and ROC-AUC front and centre.
+    </p>
+  </div>
+</section>
+
+<section style="padding-bottom:40px">
+  <div class="container">
+    <div class="reveal table-wrap">
+      <table class="metrics" id="metrics-table">
+        <thead>
+          <tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th>
+            <th>ROC-AUC</th><th>CV Acc</th><th>Train (s)</th></tr>
+        </thead>
+        <tbody id="metrics-body"></tbody>
+      </table>
+    </div>
+    <p class="muted reveal" style="margin-top:12px;font-size:.88rem">
+      <span class="star">★</span> = best model by ROC-AUC, used as the default for predictions.
+      Highlighted cells are the best value in each column.
+    </p>
+  </div>
+</section>
+
+<section style="padding-bottom:40px">
+  <div class="container grid-2">
+    <div class="reveal chart-card">
+      <h3>Metric comparison</h3>
+      <div class="chart-box"><canvas id="bar-chart"></canvas></div>
+    </div>
+    <div class="reveal chart-card" data-delay="1">
+      <h3>ROC curves</h3>
+      <div class="chart-box"><canvas id="roc-chart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-bottom:40px">
+  <div class="container grid-2">
+    <div class="reveal chart-card">
+      <h3>Training time</h3>
+      <div class="chart-box"><canvas id="time-chart"></canvas></div>
+    </div>
+    <div class="reveal chart-card" data-delay="1">
+      <h3>What to read here</h3>
+      <p class="muted" style="margin-bottom:12px">
+        All four models clear 0.79 accuracy and 0.88 ROC-AUC, so the signal is strong.
+        The choice of “best” depends on the goal:
+      </p>
+      <ul style="color:var(--muted);padding-left:18px;display:grid;gap:8px">
+        <li><strong style="color:var(--navy)">Random Forest</strong> leads on ROC-AUC — best at ranking risk.</li>
+        <li><strong style="color:var(--navy)">SVM</strong> leads on accuracy, recall and F1 — fewest missed patients.</li>
+        <li><strong style="color:var(--navy)">Logistic Regression</strong> is fastest and most interpretable.</li>
+        <li><strong style="color:var(--navy)">Gradient Boosting</strong> is a strong, balanced all-rounder.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section style="padding-bottom:96px">
+  <div class="container">
+    <h2 class="reveal" style="margin-bottom:20px">Confusion matrices <span class="muted" style="font-size:1rem;font-weight:600">(test set)</span></h2>
+    <div class="reveal cm-grid-wrap" id="cm-wrap"></div>
+    <p class="muted reveal" style="margin-top:14px;font-size:.88rem">
+      Rows are the actual class, columns the prediction. A low bottom-left number (false negatives) is
+      what we want for screening — it means few sick patients are missed.
+    </p>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

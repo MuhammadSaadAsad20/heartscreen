@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Predict — HeartScreen{% endblock %}
+
+{% block content %}
+<section class="section--tight" style="padding-top:56px">
+  <div class="container">
+    <span class="eyebrow reveal">Prediction</span>
+    <h1 class="reveal" data-delay="1" style="margin:14px 0 10px;font-size:clamp(2rem,4vw,2.8rem)">
+      Enter the patient's measurements
+    </h1>
+    <p class="lead reveal" data-delay="2">
+      Fill in the eleven clinical values, choose a model, and get an instant risk estimate.
+    </p>
+  </div>
+</section>
+
+<section style="padding-bottom:88px">
+  <div class="container grid-2" style="align-items:start;gap:28px">
+    <!-- Form -->
+    <form id="predict-form" class="card reveal">
+      <div class="field" style="margin-bottom:20px">
+        <label for="model">Model</label>
+        <select id="model" name="model">
+          {% for m in models %}
+          <option value="{{ m }}" {% if m == best_model %}selected{% endif %}>
+            {{ m }}{% if m == best_model %} — recommended{% endif %}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-grid">
+        {% for f in fields %}
+        <div class="field">
+          <label for="{{ f.name }}">{{ f.label }}</label>
+          {% if f.type == 'numeric' %}
+            <input class="input" type="number" id="{{ f.name }}" name="{{ f.name }}"
+                   min="{{ f.min }}" max="{{ f.max }}" step="{{ f.step }}" value="{{ f.default }}" required />
+          {% else %}
+            <select id="{{ f.name }}" name="{{ f.name }}">
+              {% for opt in f.options %}
+              <option value="{{ opt.value }}" {% if opt.value == f.default %}selected{% endif %}>{{ opt.text }}</option>
+              {% endfor %}
+            </select>
+          {% endif %}
+          {% if f.help %}<span class="hint">{{ f.help }}</span>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
+        <button type="submit" class="btn btn--lg" id="submit-btn">
+          <span class="btn-label">Predict risk</span>
+        </button>
+        <button type="button" class="btn btn--ghost btn--lg" id="sample-btn">Load sample patient</button>
+      </div>
+    </form>
+
+    <!-- Result -->
+    <div class="card reveal" data-delay="1" id="result-card"
+         style="position:sticky;top:90px;min-height:360px;display:grid;place-items:center">
+      <div id="result-empty" style="text-align:center;color:var(--muted);max-width:300px">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#C3CBD6" stroke-width="1.6"
+             style="margin:0 auto 14px"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l9 8.9 9-8.9a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        <h3 style="margin-bottom:6px">Your result appears here</h3>
+        <p>Fill in the form and press <strong>Predict risk</strong>.</p>
+      </div>
+
+      <div id="result" class="result" style="display:none;width:100%">
+        <div>
+          <span id="result-badge" class="badge badge--ok">Result</span>
+          <div class="result__verdict" id="result-verdict" style="margin:12px 0 8px"></div>
+          <p class="muted" id="result-sub"></p>
+          <div style="margin-top:16px;display:flex;gap:18px;flex-wrap:wrap">
+            <div><div class="muted" style="font-size:.78rem">Model</div><strong id="result-model"></strong></div>
+            <div><div class="muted" style="font-size:.78rem">Model ROC-AUC</div><strong id="result-auc"></strong></div>
+            <div><div class="muted" style="font-size:.78rem">Model recall</div><strong id="result-recall"></strong></div>
+          </div>
+        </div>
+        <div class="gauge-wrap">
+          <svg class="gauge" viewBox="0 0 200 200">
+            <circle class="gauge__track" cx="100" cy="100" r="84"></circle>
+            <circle class="gauge__value" id="gauge-arc" cx="100" cy="100" r="84"
+                    transform="rotate(-90 100 100)"
+                    stroke-dasharray="527.8" stroke-dashoffset="527.8" stroke="var(--accent)"></circle>
+            <text class="gauge__pct" id="gauge-pct" x="100" y="100" text-anchor="middle" dominant-baseline="middle">0%</text>
+            <text class="gauge__cap" x="100" y="128" text-anchor="middle">estimated risk</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/predict.js') }}"></script>
+{% endblock %}

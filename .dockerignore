@@ -1,0 +1,16 @@
+node_modules/
+package.json
+package-lock.json
+__pycache__/
+*.pyc
+.venv/
+venv/
+.git/
+_st.log
+_web.log
+docs/*.js
+.claude/
+# Streamlit backup and figure-generation are not needed in the deployed image
+app.py
+src/make_figures.py
+assets/

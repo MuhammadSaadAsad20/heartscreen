@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Explore — HeartScreen{% endblock %}
+
+{% block content %}
+<section class="section--tight" style="padding-top:56px">
+  <div class="container">
+    <span class="eyebrow reveal">Dataset</span>
+    <h1 class="reveal" data-delay="1" style="margin:14px 0 10px;font-size:clamp(2rem,4vw,2.8rem)">Explore the data</h1>
+    <p class="lead reveal" data-delay="2">
+      920 records combined from four UCI heart-disease databases. See how each clinical
+      measurement relates to the diagnosis.
+    </p>
+  </div>
+</section>
+
+<section style="padding-bottom:40px">
+  <div class="container grid-2">
+    <div class="reveal chart-card">
+      <h3>Class balance</h3>
+      <div class="chart-box"><canvas id="balance-chart"></canvas></div>
+    </div>
+    <div class="reveal chart-card" data-delay="1">
+      <h3>Correlation with diagnosis</h3>
+      <div class="chart-box"><canvas id="corr-chart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-bottom:40px">
+  <div class="container grid-2">
+    <div class="reveal chart-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+        <h3 style="margin:0">Feature distribution</h3>
+        <select id="num-select" style="max-width:220px">
+          {% for f in numeric %}<option value="{{ f.name }}">{{ f.label }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="chart-box"><canvas id="dist-chart"></canvas></div>
+    </div>
+    <div class="reveal chart-card" data-delay="1">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+        <h3 style="margin:0">Disease rate by category</h3>
+        <select id="cat-select" style="max-width:220px">
+          {% for f in categorical %}<option value="{{ f.name }}">{{ f.label }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="chart-box"><canvas id="rate-chart"></canvas></div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/explore.js') }}"></script>
+{% endblock %}

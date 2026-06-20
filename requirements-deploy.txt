@@ -1,0 +1,10 @@
+# Slim, pinned dependencies for DEPLOYING the Flask web app.
+# Only what web/server.py needs at runtime (no streamlit/matplotlib/plotly).
+# scikit-learn is pinned to the version the models were trained with so the
+# saved .joblib pipelines load without warnings or errors.
+flask>=3.0
+gunicorn>=21.2
+scikit-learn==1.9.0
+numpy>=2.0,<3
+pandas>=2.2
+joblib>=1.3

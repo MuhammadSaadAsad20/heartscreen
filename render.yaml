@@ -1,0 +1,12 @@
+# Render.com Blueprint — free Flask web service.
+# Deploy: push this repo to GitHub, then on Render: New + > Blueprint > pick the repo.
+services:
+  - type: web
+    name: heartscreen
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-deploy.txt
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.3"

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}HeartScreen — ML Risk Prediction{% endblock %}</title>
+  <meta name="description" content="A self-contained machine-learning web app that predicts heart-disease risk and compares models." />
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231FA39B' stroke-width='2.2'%3E%3Cpath d='M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav__inner">
+      <a class="brand" href="{{ url_for('home') }}">
+        <svg class="brand__mark" viewBox="0 0 24 24" fill="none" stroke-width="2.2">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+          <path d="M3.5 12.5h4l1.5-3 2 6 1.5-3h4" stroke-width="1.6"/>
+        </svg>
+        HeartScreen
+      </a>
+      <button class="nav__toggle" aria-label="Menu">
+        <svg width="24" height="24" fill="none" stroke="#0E1B2C" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="nav__links">
+        <a class="nav__link {% if page=='home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a>
+        <a class="nav__link {% if page=='predict' %}active{% endif %}" href="{{ url_for('predict_page') }}">Predict</a>
+        <a class="nav__link {% if page=='dashboard' %}active{% endif %}" href="{{ url_for('dashboard_page') }}">Dashboard</a>
+        <a class="nav__link {% if page=='explore' %}active{% endif %}" href="{{ url_for('explore_page') }}">Explore</a>
+        <a class="btn btn--ghost" style="padding:8px 18px" href="{{ url_for('predict_page') }}">Try it</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <strong style="color:var(--navy)">HeartScreen</strong> · Machine Learning Course Project
+        <div class="muted">Built with Flask &amp; scikit-learn · Models run locally, no external APIs.</div>
+      </div>
+      <div class="muted">Educational use only — not a medical device.</div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

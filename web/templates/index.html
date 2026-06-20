@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}HeartScreen — Predict heart-disease risk with ML{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero__bg"></div>
+  <div class="container hero__grid">
+    <div>
+      <span class="eyebrow reveal">Machine Learning Course Project</span>
+      <h1 class="reveal" data-delay="1">Predict heart-disease risk in&nbsp;seconds.</h1>
+      <p class="lead reveal" data-delay="2">
+        HeartScreen trains four machine-learning models on real clinical data and
+        compares them side by side — then turns the best one into an instant,
+        explainable risk check. Everything runs locally; no external APIs.
+      </p>
+      <div class="hero__cta reveal" data-delay="3">
+        <a class="btn btn--lg" href="{{ url_for('predict_page') }}">
+          Start a prediction <span class="arrow">→</span>
+        </a>
+        <a class="btn btn--ghost btn--lg" href="{{ url_for('dashboard_page') }}">View the dashboard</a>
+      </div>
+      <div class="hero__note reveal" data-delay="4">
+        <span class="dot"></span> Best model: <strong>&nbsp;{{ best_model }}</strong> · ROC-AUC {{ stats.best_auc }}
+      </div>
+    </div>
+
+    <div class="reveal" data-delay="2">
+      <div class="card pulse-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <strong style="color:var(--navy)">Live signal</strong>
+          <span class="badge badge--ok">model ready</span>
+        </div>
+        <svg class="ecg" viewBox="0 0 600 120" preserveAspectRatio="none">
+          <path d="M0,60 L120,60 L150,60 L165,20 L180,100 L200,60 L320,60 L345,60 L360,30 L378,92 L398,60 L520,60 L600,60"/>
+        </svg>
+        <div class="grid-2" style="gap:14px;margin-top:8px">
+          <div class="card" style="padding:16px">
+            <div class="muted" style="font-size:.82rem">Sensitivity (recall)</div>
+            <div style="font-size:1.6rem;font-weight:800;color:var(--navy)">High</div>
+          </div>
+          <div class="card" style="padding:16px">
+            <div class="muted" style="font-size:.82rem">Inference</div>
+            <div style="font-size:1.6rem;font-weight:800;color:var(--accent)">&lt; 50 ms</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="section--tight">
+  <div class="container">
+    <div class="card stats">
+      <div class="stat reveal">
+        <div class="stat__num" data-count="{{ stats.records }}">0</div>
+        <div class="stat__label">Patient records</div>
+      </div>
+      <div class="stat reveal" data-delay="1">
+        <div class="stat__num" data-count="{{ stats.features }}">0</div>
+        <div class="stat__label">Clinical features</div>
+      </div>
+      <div class="stat reveal" data-delay="2">
+        <div class="stat__num" data-count="{{ stats.models }}">0</div>
+        <div class="stat__label">Models compared</div>
+      </div>
+      <div class="stat reveal" data-delay="3">
+        <div class="stat__num" data-count="{{ stats.best_auc }}" data-decimals="3">0</div>
+        <div class="stat__label">Best ROC-AUC</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section">
+  <div class="container">
+    <div class="center" style="max-width:680px;margin:0 auto 44px">
+      <span class="eyebrow reveal">What it does</span>
+      <h2 class="reveal" data-delay="1" style="margin-top:14px">A full ML workflow, end to end</h2>
+      <p class="lead reveal" data-delay="2" style="margin:12px auto 0">
+        From raw medical data to an interactive prediction — every step is built in.
+      </p>
+    </div>
+    <div class="grid-3">
+      {% set feats = [
+        ('Instant prediction','Enter eleven routine measurements and get a calibrated risk score with a clear verdict.',
+         'M12 2v4m0 12v4m10-10h-4M6 12H2m15.5-5.5-2.8 2.8M9.3 14.7l-2.8 2.8m11 0-2.8-2.8M9.3 9.3 6.5 6.5'),
+        ('Four models, compared','Logistic Regression, Random Forest, SVM and Gradient Boosting — judged on the metrics that matter.',
+         'M3 3v18h18M7 15l3-4 3 2 4-6'),
+        ('Honest evaluation','Accuracy, precision, recall, F1, ROC-AUC, training time and confusion matrices — no cherry-picking.',
+         'M9 11l3 3 8-8M21 12a9 9 0 1 1-6.2-8.5')
+      ] %}
+      {% for title, body, icon in feats %}
+      <div class="card card--hover feature reveal" data-delay="{{ loop.index0 }}">
+        <div class="feature__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="{{ icon }}"/></svg>
+        </div>
+        <h3>{{ title }}</h3>
+        <p class="muted">{{ body }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="section" style="background:var(--surface-2)">
+  <div class="container">
+    <div class="center" style="max-width:680px;margin:0 auto 44px">
+      <span class="eyebrow reveal">How it works</span>
+      <h2 class="reveal" data-delay="1" style="margin-top:14px">Four steps from data to decision</h2>
+    </div>
+    <div class="steps">
+      {% set steps = [
+        ('Clean the data','920 records from four UCI databases are merged, with missing and zero-coded values handled.'),
+        ('Engineer features','Numbers are scaled, categories one-hot encoded — all inside one leakage-free pipeline.'),
+        ('Train & compare','Four models are trained on the same split and scored with cross-validation.'),
+        ('Predict live','The best model is served through this app for instant, local predictions.')
+      ] %}
+      {% for title, body in steps %}
+      <div class="step reveal" data-delay="{{ loop.index0 }}">
+        <div class="step__num">{{ loop.index }}</div>
+        <h3>{{ title }}</h3>
+        <p class="muted">{{ body }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="container">
+    <div class="card reveal" style="text-align:center;padding:56px 28px;background:
+        radial-gradient(80% 120% at 50% 0%, var(--accent-soft), var(--surface) 70%)">
+      <h2>Ready to see it in action?</h2>
+      <p class="lead" style="margin:12px auto 26px">Run a prediction or explore how the models compare.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a class="btn btn--lg" href="{{ url_for('predict_page') }}">Try a prediction <span class="arrow">→</span></a>
+        <a class="btn btn--ghost btn--lg" href="{{ url_for('explore_page') }}">Explore the data</a>
+      </div>
+      <p class="disclaimer" style="display:inline-block;margin-top:30px">
+        This is an educational project and <strong>not a medical device</strong>. Do not use it for real diagnosis.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

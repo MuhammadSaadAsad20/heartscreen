@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node (only needed to build the .docx reports)
+node_modules/
+package-lock.json
+
+# Logs / temp
+_st.log
+_web.log
+*.log
+_reqs_unpacked/
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keep models/figures committed for the demo; remove the next lines to ignore them
+# models/
+# assets/

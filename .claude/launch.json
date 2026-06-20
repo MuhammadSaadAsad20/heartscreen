@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "heart-web",
+      "runtimeExecutable": "py",
+      "runtimeArgs": ["-3.12", "web/server.py"],
+      "port": 5000
+    },
+    {
+      "name": "heart-app",
+      "runtimeExecutable": "py",
+      "runtimeArgs": ["-3.12", "-m", "streamlit", "run", "app.py", "--server.headless", "true", "--server.port", "8536", "--server.runOnSave", "false"],
+      "port": 8536
+    }
+  ]
+}
