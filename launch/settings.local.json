@@ -49,7 +49,11 @@
       "Bash(git init *)",
       "Bash(git config *)",
       "Bash(git add *)",
-      "Bash(xargs du -h)"
+      "Bash(xargs du -h)",
+      "Bash(git commit -q -m ' *)",
+      "Bash(PORT=8090 py -3.12 web/server.py)",
+      "Bash(pkill -f \"web/server.py\")",
+      "Bash(rm -f _web.log)"
     ]
   }
 }
