@@ -1,5 +1,7 @@
 # HeartScreen — Heart Disease Prediction Web App
 
+**🔗 Live demo:** https://CronoNebula-heartscreen.hf.space
+
 A fully self-contained, web-based machine learning application that predicts the
 presence of heart disease from routine clinical measurements and compares
 several models trained **locally** on the UCI Heart Disease dataset.
