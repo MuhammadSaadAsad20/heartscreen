@@ -19,8 +19,9 @@ _reqs_unpacked/
 .DS_Store
 Thumbs.db
 
-# Local Claude Code settings (not for the public repo)
+# Local Claude Code / editor tooling (not for the public repo)
 .claude/settings.local.json
+launch/
 
 # Keep models/figures committed for the demo; remove the next lines to ignore them
 # models/
