@@ -1,42 +1,37 @@
-# HeartScreen — Heart Disease Prediction Web App
+# HeartScreen: Heart Disease Prediction
 
-**🔗 Live demo:** https://CronoNebula-heartscreen.hf.space
+**Live demo:** <https://crononebula-heartscreen.hf.space>
 
-A fully self-contained, web-based machine learning application that predicts the
-presence of heart disease from routine clinical measurements and compares
-several models trained **locally** on the UCI Heart Disease dataset.
+Compares four scikit-learn classifiers on 920 patient records combined from four UCI databases,
+then serves them through a Flask app with a risk form and a model-comparison dashboard. All models
+train and run locally, with no external prediction APIs.
 
-Two front-ends are included:
+> Educational project. Not a medical device, and not for real diagnosis.
 
-- **`web/` — a modern Flask app** (primary): custom HTML/CSS/JS, clinical-light
-  theme, button/scroll/page animations, animated risk gauge, interactive dashboard.
-- **`app.py` — a Streamlit app** (backup): the original, simpler interface.
+![Model comparison dashboard](docs/screenshots/heartscreen-dashboard.png)
 
-Both reuse the same locally-trained scikit-learn models — **no external prediction APIs**.
+## Results
 
-> Educational course project. **Not a medical device** — do not use for real diagnosis.
+Evaluated on a stratified 80/20 split (736 train, 184 test), with 5-fold cross-validation on the
+training set.
 
----
+| Model | Accuracy | Recall | F1 | ROC-AUC | CV accuracy |
+|---|---|---|---|---|---|
+| Logistic Regression | 0.793 | 0.843 | 0.819 | 0.889 | 0.798 |
+| **Random Forest** | 0.793 | 0.853 | 0.821 | **0.901** | 0.811 |
+| Support Vector Machine | **0.821** | **0.892** | **0.847** | 0.888 | 0.811 |
+| Gradient Boosting | 0.804 | 0.863 | 0.830 | 0.888 | 0.785 |
 
-## Features
-
-| Project requirement | How it is satisfied |
-|---|---|
-| Web interface | Flask app with 4 pages (Streamlit backup included) |
-| ≥ 2 ML algorithms on one dataset | **4** models: Logistic Regression, Random Forest, SVM, Gradient Boosting |
-| No external APIs | All models are trained and run locally; chart library vendored — works offline |
-| User input → prediction | **Predict** page with a clinical-measurement form + animated risk gauge |
-| Model comparison dashboard | **Dashboard**: accuracy, precision, recall, F1, ROC-AUC, training time, confusion matrices, ROC curves |
-| 500+ records, cleaned | 920 records combined from 4 UCI databases, preprocessed in a pipeline |
-
-The Flask app has four pages: **Home**, **Predict**, **Dashboard**, and **Explore**.
+Random Forest is the default because it ranks cases best by ROC-AUC. SVM has better recall, which
+matters in screening, so the choice depends on the decision threshold. Models use fixed
+hyperparameters, so a proper search is the obvious next improvement.
 
 ---
 
-## 📁 Project structure
+## Project structure
 
 ```
-ML LAB/
+heartscreen/
 ├── web/                    # MODERN FLASK APP (primary)
 │   ├── server.py           #   Flask routes + JSON API (loads the trained models)
 │   ├── templates/          #   base, index, predict, dashboard, explore (Jinja2)
@@ -65,13 +60,13 @@ ML LAB/
 
 The project was developed with **Python 3.12**.
 
-**Option A — one click (Flask app):**
+**Option A: one click (Flask app):**
 ```bat
 run.bat
 ```
 Then open <http://localhost:5000>.
 
-**Option B — manual:**
+**Option B: manual:**
 ```bat
 py -3.12 -m pip install -r requirements.txt
 py -3.12 src\build_dataset.py     :: optional, data/heart.csv already included
@@ -103,7 +98,7 @@ Stratified 80/20 train/test split (736 train / 184 test). Best model chosen by R
 
 ## 📊 Dataset
 
-**UCI Heart Disease Data Set** — combined Cleveland, Hungarian, Switzerland, and
+**UCI Heart Disease Data Set**: combined Cleveland, Hungarian, Switzerland, and
 VA Long Beach databases (920 records). Eleven clinical features
 (age, sex, chest-pain type, resting blood pressure, cholesterol, fasting blood
 sugar, resting ECG, max heart rate, exercise-induced angina, ST depression, ST
@@ -124,7 +119,7 @@ attributes are dropped.
 |---|---|
 | `Project_Proposal.docx` | The project proposal |
 | `Project_Report.docx` | The full 8–15 page report (figures + all required sections) |
-| `Technical_Documentation.docx` | How the app works — architecture, files, data flow, API |
+| `Technical_Documentation.docx` | How the app works: architecture, files, data flow, API |
 | `Viva_Preparation_Guide.docx` | Demo script + 30+ viva questions with answers |
 
 The `.docx` files are regenerated from `docs/*.js` with `node docs/<script>.js`.
